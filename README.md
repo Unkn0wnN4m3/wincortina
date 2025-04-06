@@ -9,3 +9,5 @@ Put this code inside `pyrightconfig.json`. Change what's inside `".venv"` to you
   "extraPaths": ["./lib"]
 }
 ```
+
+servo library from [TTitanUA/micropython_servo_pdm_360](https://github.com/TTitanUA/micropython_servo_pdm_360)
