@@ -2,6 +2,7 @@ import gc
 import time
 
 from machine import ADC, PWM, Pin
+import config
 from micropython_servo_pdm_360 import ServoPDM360
 
 
@@ -21,19 +22,13 @@ class Curtain:
             raise
 
     def __init_hardware(self):
-        # Set the parameters of the servo pulses, more details in the "Documentation" section
-        freq = 50
-        min_us = 400
-        max_us = 2550
-        dead_zone_us = 150
-
         # create a servo object
         self.servo = ServoPDM360(
             pwm=self.servo_pwm,
-            min_us=min_us,
-            max_us=max_us,
-            dead_zone_us=dead_zone_us,
-            freq=freq,
+            min_us=config.MIN_US,
+            max_us=config.MAX_US,
+            dead_zone_us=config.DEAD_ZONE_US,
+            freq=config.FREQ,
         )
 
     def __init_status(self):
@@ -51,18 +46,16 @@ class Curtain:
     def __handle_curtain(
         self,
     ):
-        if self.__get_light_value_volts() > 1.0:
-            self.servo.turn_cv(4)
-        elif self.__get_light_value_volts() < 1.0:
-            self.servo.turn_ccv(4)
+        if self.__get_light_value_volts() > config.THRESHOLD:
+            self.servo.turn_cv(config.FORCE)
+        elif self.__get_light_value_volts() < config.THRESHOLD:
+            self.servo.turn_ccv(config.FORCE)
         else:
             self.servo.stop()
 
-    def __get_light_value_volts(self):
-        ADC_Q = 2**16
-        VOUT = 3.3
-        INPUT_VALUE = self.light_sensor.read_u16()
-        return VOUT * INPUT_VALUE / ADC_Q
+    def __get_light_value_volts(self) -> float:
+        input_value = self.light_sensor.read_u16()
+        return config.VOUT * input_value / config.ADC_Q
 
     def start(self):
         if not self.is_running:
