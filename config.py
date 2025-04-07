@@ -9,7 +9,7 @@ DEAD_ZONE_US = 150
 
 # Light sensor constants
 THRESHOLD = 1.0
-FORCE = 4
+FORCE = 10
 
 # ADC constants
 ADC_Q = 2**16
