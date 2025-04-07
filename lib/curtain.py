@@ -10,18 +10,20 @@ class Curtain:
     def __init__(
         self, servo_pin: int, light_sersor_pin: int, magnetic_sensor_pin: int
     ) -> None:
-        self.servo_pwm = PWM(Pin(servo_pin))
-        self.light_sensor = ADC(Pin(light_sersor_pin))
-        self.magnetic_sensor = Pin(magnetic_sensor_pin, Pin.IN, Pin.PULL_UP)
-
         try:
-            self.__init_hardware()
+            self.__init_hardware(servo_pin, light_sersor_pin, magnetic_sensor_pin)
             self.__init_status()
         except Exception as e:
             print(f"Initialization erro: {e}")
             raise
 
-    def __init_hardware(self):
+    def __init_hardware(
+        self, servo_pin: int, light_sersor_pin: int, magnetic_sensor_pin: int
+    ):
+        self.servo_pwm = PWM(Pin(servo_pin))
+        self.light_sensor = ADC(Pin(light_sersor_pin))
+        self.magnetic_sensor = Pin(magnetic_sensor_pin, Pin.IN, Pin.PULL_UP)
+
         # create a servo object
         self.servo = ServoPDM360(
             pwm=self.servo_pwm,
