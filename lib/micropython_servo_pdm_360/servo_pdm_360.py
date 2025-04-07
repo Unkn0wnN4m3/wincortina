@@ -26,7 +26,7 @@ class ServoPDM360:
 
     def set_duty(self, duty_us: int):
         self._curr_duty = duty_us
-        print(f"Setting duty to {duty_us}us")
+        # print(f"Setting duty to {duty_us}us")
         self.pwm.duty_ns(duty_us * 1000)
 
     def turn_ccv(self, force: int = None):
