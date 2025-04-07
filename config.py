@@ -7,6 +7,7 @@ MIN_US = 400
 MAX_US = 2550
 DEAD_ZONE_US = 150
 
+# Light sensor constants
 THRESHOLD = 1.0
 FORCE = 4
 
