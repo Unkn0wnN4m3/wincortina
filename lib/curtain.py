@@ -2,8 +2,9 @@ import gc
 import time
 
 from machine import ADC, PWM, Pin
-import config
 from micropython_servo_pdm_360 import ServoPDM360
+
+import config
 
 
 class Curtain:
