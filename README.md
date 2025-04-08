@@ -1,5 +1,7 @@
 # Wincortina
 
+![Wincortina](./media/wincortina.png)
+
 Put this code inside `pyrightconfig.json`. Change what's inside `".venv"` to
 your own venv
 
