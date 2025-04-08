@@ -43,6 +43,8 @@ class Curtain:
         input pin for the magnetic sensor.
         """
         self.servo_pwm = PWM(Pin(servo_pin))
+        # WARN: ADC class may trow and error if the pin doesn't support analog
+        # to digital function. Search for "pico w pinout"
         self.light_sensor = ADC(Pin(light_sersor_pin))
         self.magnetic_sensor = Pin(magnetic_sensor_pin, Pin.IN, Pin.PULL_UP)
 
