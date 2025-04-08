@@ -11,41 +11,41 @@ class Curtain:
     """Main class. All starts here"""
 
     def __init__(
-        self, servo_pin: int, light_sersor_pin: int, magnetic_sensor_pin: int
+        self, servo_pin: int, light_sensor_pin: int, magnetic_sensor_pin: int
     ) -> None:
         """
         Initializes the Curtain object.
 
         Args:
             servo_pin (int): The GPIO pin connected to the servo motor.
-            light_sersor_pin (int): The GPIO pin connected to the light sensor.
+            light_sensor_pin (int): The GPIO pin connected to the light sensor.
             magnetic_sensor_pin (int): The GPIO pin connected to the magnetic sensor.
         """
         try:
-            self.__init_hardware(servo_pin, light_sersor_pin, magnetic_sensor_pin)
+            self.__init_hardware(servo_pin, light_sensor_pin, magnetic_sensor_pin)
             self.__init_status()
         except Exception as e:
-            print(f"Initialization erro: {e}")
+            print(f"Initialization error: {e}")
             raise
 
     def __init_hardware(
-        self, servo_pin: int, light_sersor_pin: int, magnetic_sensor_pin: int
+        self, servo_pin: int, light_sensor_pin: int, magnetic_sensor_pin: int
     ) -> None:
         """
         Initializes the hardware components of the Curtain system.
 
         Args:
             servo_pin (int): The GPIO pin connected to the servo motor.
-            light_sersor_pin (int): The GPIO pin connected to the light sensor.
+            light_sensor_pin (int): The GPIO pin connected to the light sensor.
             magnetic_sensor_pin (int): The GPIO pin connected to the magnetic sensor.
 
         Sets up the PWM for servo control, ADC for light sensor reading, and
         input pin for the magnetic sensor.
         """
         self.servo_pwm = PWM(Pin(servo_pin))
-        # WARN: ADC class may trow and error if the pin doesn't support analog
+        # WARN: ADC class may throw an error if the pin doesn't support analog
         # to digital function. Search for "pico w pinout"
-        self.light_sensor = ADC(Pin(light_sersor_pin))
+        self.light_sensor = ADC(light_sensor_pin)  # Simplified ADC initialization
         self.magnetic_sensor = Pin(magnetic_sensor_pin, Pin.IN, Pin.PULL_UP)
 
         # create a servo object
@@ -65,15 +65,19 @@ class Curtain:
         These flags control the operational state of the curtain system.
         """
         self.is_open = False
-        self.is_openning = False
+        self.is_opening = False
         self.is_running = False
 
     def __handle_control_button(self) -> None:
+        """
+        Handles the magnetic sensor button press to toggle curtain movement.
+        Uses debouncing to prevent false triggers.
+        """
         current_state = self.magnetic_sensor.value()
         if current_state == 0:
-            self.is_openning = not self.is_openning
-            print(f"alarm status: {self.is_openning}")
-            time.sleep(0.5)
+            self.is_opening = not self.is_opening
+            print(f"alarm status: {self.is_opening}")
+            time.sleep(0.5)  # Debounce delay
 
     def __handle_curtain(
         self,
@@ -126,7 +130,7 @@ class Curtain:
                 while self.is_running:
                     self.__handle_control_button()
 
-                    if self.is_openning:
+                    if self.is_opening:
                         self.__handle_curtain()
                     else:
                         self.servo.stop()
@@ -147,7 +151,7 @@ class Curtain:
         """
         print("system stoped")
         self.is_open = False
-        self.is_openning = False
+        self.is_opening = False
         self.is_running = False
         self.servo.stop()
         gc.collect()
