@@ -1,6 +1,7 @@
 import gc
 import time
 
+import wifi_connection
 from machine import ADC, PWM, Pin
 from micropython_servo_pdm_360 import ServoPDM360
 
@@ -55,6 +56,12 @@ class Curtain:
             max_us=config.MAX_US,
             dead_zone_us=config.DEAD_ZONE_US,
             freq=config.FREQ,
+        )
+
+        from config_wifi import WIFI_CONFIG
+
+        self.wifi = wifi_connection.WiFiConnection(
+            WIFI_CONFIG.get("ssid", ""), WIFI_CONFIG.get("password", "")
         )
 
     def __init_status(self) -> None:
@@ -127,6 +134,10 @@ class Curtain:
             try:
                 self.is_running = True
                 print("Starting system...")
+
+                if not self.wifi.connect():
+                    raise Exception("Could't connect to Wi-Fi")
+
                 while self.is_running:
                     self.__handle_control_button()
 
@@ -154,4 +165,5 @@ class Curtain:
         self.is_opening = False
         self.is_running = False
         self.servo.stop()
+        self.wifi.disconnect()
         gc.collect()
