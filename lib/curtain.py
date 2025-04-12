@@ -1,5 +1,5 @@
-import time
-
+# import time
+import utime
 from machine import PWM, Pin
 from micropython_servo_pdm_360 import ServoPDM360
 
@@ -19,7 +19,6 @@ class Curtain:
         try:
             self.servo_pwm = PWM(Pin(servo_pin))
 
-            # create a servo object
             self.servo = ServoPDM360(
                 pwm=self.servo_pwm,
                 min_us=config.MIN_US,
@@ -27,25 +26,16 @@ class Curtain:
                 dead_zone_us=config.DEAD_ZONE_US,
                 freq=config.FREQ,
             )
-            # self.__init_status()
         except Exception as e:
             print(f"Initialization error: {e}")
             raise
 
     def curtain_open(self) -> None:
-        # start = time.ticks_ms()
         self.servo.turn_cv(config.FORCE)
-        time.sleep(2)
+        utime.sleep_ms(2000)
         self.servo.stop()
-
-        # if time.ticks_diff(time.ticks_ms(), start) > 2000:
-        # self.servo.stop()
 
     def curtain_close(self) -> None:
-        # start = time.ticks_ms()
         self.servo.turn_ccv(config.FORCE)
-        time.sleep(1)
+        utime.sleep_ms(2000)
         self.servo.stop()
-
-        # if time.ticks_diff(time.ticks_ms(), start) > 2000:
-        #     self.servo.stop()
