@@ -32,10 +32,10 @@ class Curtain:
 
     def curtain_open(self) -> None:
         self.servo.turn_cv(config.FORCE)
-        utime.sleep_ms(2000)
+        utime.sleep_ms(config.SLEEPTIME * config.CURTAINT_LENGT_CM)
         self.servo.stop()
 
     def curtain_close(self) -> None:
         self.servo.turn_ccv(config.FORCE)
-        utime.sleep_ms(2000)
+        utime.sleep_ms(config.SLEEPTIME * config.CURTAINT_LENGT_CM)
         self.servo.stop()
