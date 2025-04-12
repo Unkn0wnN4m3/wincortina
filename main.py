@@ -1,19 +1,28 @@
-import gc
+from curtain import Curtain
+from light_sensor import LightSensor
+from machine import Pin
+from phew import server
+from rest import close, open
+from wifi_connection import WiFiConnection
 
 import config
-import curtain
+import config_wifi
 
 if __name__ == "__main__":
-    c = None
-
     try:
-        c = curtain.Curtain(config.SERVO_PIN, config.LIGHT_SENSOR_PIN, 16)
-        c.start()
-    except KeyboardInterrupt:
-        print("System interrumpet by the user")
+        cur = Curtain(config.SERVO_PIN)
+        wifi = WiFiConnection(
+            config_wifi.WIFI_CONFIG.get("ssid", ""),
+            config_wifi.WIFI_CONFIG.get("password", ""),
+        )
+
+        if not wifi.connect():
+            raise Exception("ssid or password is worng")
+
     except Exception as e:
-        print(f"Fatal erro: {e}")
-    finally:
-        if c:
-            c.stop()
-        gc.collect()
+        print(f"Initialization error: {e}")
+
+    server.add_route("/open", open, methods=["GET"])
+    server.add_route("/close", close, methods=["GET"])
+
+    server.run()
