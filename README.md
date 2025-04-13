@@ -15,4 +15,14 @@ your own venv
 }
 ```
 
-servo library from [TTitanUA/micropython_servo_pdm_360](https://github.com/TTitanUA/micropython_servo_pdm_360)
+Wi-Fi config fille should be named: `config_wifi.py` with the following content:
+
+```python
+WIFI_CONFIG = {
+    "ssid": "your_ssid",
+    "password": "your_password",
+}
+```
+
+- servo library from [TTitanUA/micropython_servo_pdm_360](https://github.com/TTitanUA/micropython_servo_pdm_360)
+- rest server library from [pimoroni/phew](https://github.com/pimoroni/phew)
