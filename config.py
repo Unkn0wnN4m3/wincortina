@@ -3,15 +3,15 @@ SERVO_PIN = 15
 
 # servo constants
 FREQ = 50
-MIN_US = 400
-MAX_US = 2550
+MIN_US = 600
+MAX_US = 2350
 DEAD_ZONE_US = 150
-SLEEPTIME = 2000
-CURTAINT_LENGT_CM = 1
+TIME_PER_CM = 1000
+CURTAINT_LENGT_CM = 6
+FORCE = 50
 
 # Light sensor constants
 THRESHOLD = 1.0
-FORCE = 10
 
 # ADC constants
 ADC_Q = 2**16
