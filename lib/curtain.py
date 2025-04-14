@@ -1,5 +1,4 @@
 # import time
-import utime
 from machine import PWM, Pin
 from micropython_servo_pdm_360 import ServoPDM360RP2Async
 
