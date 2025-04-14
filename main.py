@@ -1,16 +1,13 @@
-from curtain import Curtain
-from light_sensor import LightSensor
-from machine import Pin
+import uasyncio
 from phew import server
 from rest import close, open
+from sensor_task import get_light_value
 from wifi_connection import WiFiConnection
 
-import config
 import config_wifi
 
 if __name__ == "__main__":
     try:
-        cur = Curtain(config.SERVO_PIN)
         wifi = WiFiConnection(
             config_wifi.WIFI_CONFIG.get("ssid", ""),
             config_wifi.WIFI_CONFIG.get("password", ""),
@@ -24,5 +21,7 @@ if __name__ == "__main__":
 
     server.add_route("/open", open, methods=["GET"])
     server.add_route("/close", close, methods=["GET"])
+
+    uasyncio.create_task(get_light_value())  # Añade la tarea al loop
 
     server.run()
