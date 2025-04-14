@@ -16,12 +16,11 @@ if __name__ == "__main__":
         if not wifi.connect():
             raise Exception("ssid or password is worng")
 
+        server.add_route("/open", open, methods=["GET"])
+        server.add_route("/close", close, methods=["GET"])
+
+        uasyncio.create_task(get_light_value())  # Añade la tarea al loop
+
+        server.run()
     except Exception as e:
         print(f"Initialization error: {e}")
-
-    server.add_route("/open", open, methods=["GET"])
-    server.add_route("/close", close, methods=["GET"])
-
-    uasyncio.create_task(get_light_value())  # Añade la tarea al loop
-
-    server.run()
